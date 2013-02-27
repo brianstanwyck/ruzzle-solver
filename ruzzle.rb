@@ -29,7 +29,7 @@ class PuzzleNode
   def initialize(value)
     @visited = false
     @value = value
-    @neighbors = {}
+    @neighbors = []
   end
 end
 
@@ -52,7 +52,7 @@ class Puzzle
           newx = x + dx
           newy = y + dy
           if newx >= 0 && newy >= 0 && rows[newy] && rows[newy][newx]
-            node.neighbors[[dx, dy]] = rows[newy][newx]
+            node.neighbors << rows[newy][newx]
           end
         end
       end
@@ -66,24 +66,18 @@ def puzzle_walk(puzzle, tree, words = Set.new, current_word = "", current_node =
   return words unless tree
 
   nodes = if current_node
-            current_node.neighbors.values
+            current_node.neighbors
           else
             puzzle.nodes
           end
 
-  word = if current_node
-           current_word + current_node.value
-         else
-           current_word
-         end
-
   if tree.terminal
-    words << word
+    words << current_word
   end
 
   nodes.each do |node|
     next if visited.include?(node)
-    words += puzzle_walk(puzzle, tree.child_at(node.value), words, word, node, visited + [current_node])
+    words += puzzle_walk(puzzle, tree.child_at(node.value), words, current_word + node.value, node, visited + [current_node])
   end
 
   words
