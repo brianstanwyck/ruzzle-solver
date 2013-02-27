@@ -96,7 +96,7 @@ if File.exists?('marshal_tree')
 else
   tree = WordTree.new
   WORDS.each do |word|
-    tree.add_word(word)
+    tree.add_word(word.upcase)
   end
   File.open('marshal_tree', 'w') do |f|
     f << Marshal.dump(tree)
