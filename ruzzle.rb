@@ -89,11 +89,11 @@ def puzzle_walk(puzzle, tree, words = Set.new, current_word = "", current_node =
   words
 end
 
-WORDS = File.read('dictionary.txt').split("\r\n")
 
 if File.exists?('marshal_tree')
   tree = Marshal.load(File.read('marshal_tree'))
 else
+  WORDS = File.read('dictionary.txt').split(/\r?\n/)
   tree = WordTree.new
   WORDS.each do |word|
     tree.add_word(word.upcase)
